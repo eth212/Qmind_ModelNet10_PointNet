@@ -23,7 +23,7 @@ from tensorflow.keras import layers
 import time
 from IPython import display
 import math
-#################
+############################
 
 ############################
 # import the mnist data set as numpy arrays
@@ -33,7 +33,7 @@ print("Train Images: {}".format(train_images.shape))
 
 ############################
 # define some constants
-EPOCHS = 10
+EPOCHS = 500
 total_batch_size = train_images.shape[0]
 m = 256 # BATCH SIZE
 noise_dim = 100
@@ -258,9 +258,10 @@ def disc_accuracy():
     real_accuracy = 0
     fake_accuracy = 0
 
-    better_test_images = test_images.reshape(test_images.shape[0], 28, 28, 1)
+    better_test_images = test_images[0 : m, :, :]
+    better_test_images = better_test_images.reshape(m, 28, 28, 1)
 
-    noise = tf.random.normal([test_images.shape[0], noise_dim])
+    noise = tf.random.normal([m, noise_dim])
     generated_images = generator(noise, training=False)
     real_output = discriminator(better_test_images, training=False)
     fake_output = discriminator(generated_images, training=False)
@@ -333,7 +334,6 @@ def train(dataset, epochs):
 
     end = time.time()
     print("Done in {} seconds!".format(end-start))
-
 
   # Generate after the final epoch
   display.clear_output(wait=True)
